@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>asd</title>
+    </head>
+    <body>
+
+    </body>
+</html>
+<script>
+var log = function() {
+    console.log.apply(console, arguments)
+}
+var ensure = function(condition, message) {
+    // 在条件不成立的时候, 输出 message
+    if(!condition) {
+        log('*** 测试失败:', message)
+    }
+}
+// 开始
+var lower = 'abcdefghijklmnopqrstuvwxyz'
+var upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+var find = function(s1, s2) {
+    let result
+    for (let i = 0; i < s1.length; i++) {
+        if (s1[i] === s2) {
+            result = i
+        }
+    }
+    if (result === undefined) {
+        result = -1
+    }
+    // log(result)
+    return result
+    /*
+    s1 s2 都是 string
+    但 s2 的长度是 1
+
+    返回 s2 在 s1 中的下标, 从 0 开始, 如果不存在则返回 -1
+    */
+}
+var lowercase1 = function(s) {
+    let result = ''
+    let index
+    for (var i = 0; i < s.length; i++) {
+        index = find(lower, s[i])
+        if (s[i] === lower[index]) {
+            result = result + upper[index]
+        } else {
+            result = result + s[i]
+        }
+    }
+    return result
+}
+let test_lowercase1 = function() {
+    ensure( lowercase1('ADsdg') === 'ADSDG', '测试1')
+    ensure( lowercase1('ADsdgfdgfg') === 'ADSDGFDGFG', '测试2')
+}
+test_lowercase1()
+</script>

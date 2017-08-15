@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>一个来自外星的音乐播放器</title>
+        <style>
+        html {
+            height:100%;
+            margin:0;
+            color: rgb(104, 113, 116);
+            background-color: black;
+        }
+        body {
+            height: 80%;
+            width: 50%;
+            text-align: center;
+            margin:0;
+            transform:translateX(50%);
+        }
+        .play-controls-slider {
+            margin: 1.5rem auto 0.5rem auto;
+        }
+        .music-all{
+            background-image: url(1.jpg);
+            opacity: 0.9;
+        }
+        #id-song-title {
+            font-family: "Microsoft YaHei";
+            font-size: 1.5rem;
+            height: 30px;
+            margin: 5px 0;
+            font-weight: bold;
+            -webkit-margin-before: 0.83em;
+            -webkit-margin-after: 0.83em;
+            color: gray;
+        }
+        #id-input-slider {
+            display: block;
+            width: 100%;
+            background-color: black;
+        }
+        #id-voice-slider{
+            width: 30%;
+            top: 50%;
+            position: relative;
+            transform: translateY(-50%);
+        }
+        .left {
+            display: inline-block;
+            float: left;
+            font-weight: 600;
+            color: gray;
+        }
+        .right {
+            color: gray;
+            display: inline-block;
+            float: right;
+            font-weight: 600;
+        }
+        #id-img-cover {
+            display: inline-block;
+            border-radius: 50%;
+            width: 13rem;
+            height: 13rem;
+        }
+        img {
+            display: inline-block;
+            width: 30px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        song {
+            display: block;
+            font-family: "Microsoft YaHei";
+            font-size: 1.3rem;
+            font-weight: 500;
+            /*color: lightgreen;*/
+            cursor: pointer;
+            -webkit-margin-before: 0.83rem;
+            -webkit-margin-after: 0.83rem;
+        }
+        .play-list {
+            color: blue;
+            /*font-weight: bold;*/
+        }
+        .music-control {
+            /*display: none;*/
+        }
+        /*.slide-img-active {
+            display: inline-block;
+        }*/
+        </style>
+    </head>
+    <body>
+        <div class="music-all" style="">
+            <h1 id=id-song-title>薛之谦 - 演员</h1>
+            <hr>
+            <div class="play-list-container">
+                <div class="play-list">
+                    <!-- <song data-id='0'>薛之谦 - 演员</song>
+                    <song data-id='1'>蔡健雅 - 红色高跟鞋</song>
+                    <song data-id='2'>Hoaprox - Ngẫu Hứng</song>
+                    <song data-id='3'>Fefe Dobson - Stuttering</song> -->
+                </div>
+                <hr>
+            </div>
+            <img id='id-img-cover' src="薛之谦.jpg" alt="">
+            <audio id="id-audio-player" autoplay>
+                <source src="薛之谦 - 演员.mp3">
+                <source src="蔡健雅 - 红色高跟鞋.mp3">
+                <source src="Hoaprox - Ngẫu Hứng.mp3">
+                <source src="Fefe Dobson - Stuttering.mp3">
+            </audio>
+            <div class="player-controls">
+                <hr>
+                <div class="play-controls-slider">
+                    <!-- <img src="声音.png" alt=""> -->
+                    <input id=id-voice-slider type="range" value="">
+                    <input id=id-input-slider type="range" value="">
+                </div>
+            </div>
+            <div class="player-time">
+                <time id=id-time-current class='left'>0:00</time>
+                <time id=id-time-duration class='right'>0：00</time>
+            </div>
+            <div class="play-center">
+                <img class='music-prev' type='button' src="上一曲.png" alt="">
+                <w class="slide-img" data-active='0' data-img='2'>
+                <img class='music-control-play' type='button' src="开始.png" alt="">
+                <img class='music-control-stop' type='button' src="暂停.png" alt="">
+                </w>
+                <img class='music-next' type='button' src="下一曲.png" alt="">
+            </div>
+            <hr>
+        </div>
+    </body>
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+    <script>
+        let log = console.log.bind(console)
+        // 设置一个播放列表
+        let Music = {
+            list:[
+                {
+                    music_name:'薛之谦 - 演员',
+                    music_src: '薛之谦 - 演员.mp3',
+                    background_src:'薛之谦.jpg',
+                },
+                {
+                    music_name:'蔡健雅 - 红色高跟鞋',
+                    music_src: '蔡健雅 - 红色高跟鞋.mp3',
+                    background_src:'蔡健雅.jpg',
+                },
+                {
+                    music_name:'Hoaprox - Ngẫu Hứng',
+                    music_src: 'Hoaprox - Ngẫu Hứng.mp3',
+                    background_src:'Hoaprox.jpg',
+                },
+                {
+                    music_name:'Fefe Dobson - Stuttering',
+                    music_src: 'Fefe Dobson - Stuttering.mp3',
+                    background_src:'Fefe Dobson.jpg',
+                },
+            ],
+            now_id: 0,
+        }
+        // 列表初始化
+        let listInit = function() {
+            let html = ''
+            for (var i = 0; i < Music.list.length; i++) {
+                let o = Music.list[i]
+                html = html + `<song data-id='${i}'>${o.music_name}</song>`
+            }
+            $('.play-list').html(html)
+        }
+        // 图片初始化
+        // let imgsInit = function() {
+        //     let img = $('#id-img-cover')
+        //     Music.list.forEach(function(e) {
+        //         log(e.background_src)
+        //         let img = ''
+        //         img.src = img + e.background_src
+        //         log(img.src)
+        //     })
+        // }
+        // imgsInit()
+        // 点击切换歌曲
+        let bindSwitch = function() {
+            let player = $('#id-audio-player')[0]
+            $('song').on('click',function(e) {
+                let self = $(e.target)[0]
+                let id = self.dataset.id
+                let o = Music.list[id]
+                // 根据当前的播放状态设置autoplay
+                player.autoplay = !player.paused
+                // 当前播放的歌曲
+                Music.now_id = id
+                player.src = o.music_src
+                // 改变歌曲名称
+                $('#id-song-title').text(o.music_name)
+                // 改变照片
+                $('#id-img-cover').text(o.bac)
+            })
+        }
+        // 进度条中需要调用的函数
+        var playerSetTime = function(value) {
+            var player = $('#id-audio-player')[0]
+            var time = player.duration * value / 100
+            player.currentTime = time
+        }
+        // 设置input进度条
+        let bindTimeSlider = function() {
+            let player = $('#id-audio-player')[0]
+            $('#id-input-slider').on('change',function(e) {
+                let value = e.target.value
+                // log('value',value)
+                // 滑动进度条改变歌曲进度
+                playerSetTime(parseInt(value))
+            })
+        }
+        // 设置当前时间time
+        var labelFromTime = function(time) {
+            var minutes = Math.floor(time / 60)
+            var seconds = Math.floor(time % 60)
+            if (minutes < 10) {
+                minutes = '0' + minutes
+            }
+            if (seconds < 10) {
+                seconds = '0' + seconds
+            }
+            var t = `${minutes}:${seconds}`
+            return t
+        }
+        // 设置进度条（归零，走动）
+        var setSlider = function(value) {
+            var v = value * 100
+            $('#id-input-slider').val(v)
+        }
+        // 播放音乐时进度条跟着前进
+        let bindAudioEvents = function() {
+            $('#id-audio-player').on('timeupdate',function(e) {
+                let player = e.target
+                let value = player.currentTime / player.duration
+                setSlider(value)
+                let time = labelFromTime(player.currentTime)
+                // 进度条改变为当前播放的时间
+                $('#id-time-current').text(time)
+            })
+            // 加载音乐的播放时长
+            $('#id-audio-player').on('canplay',function(e) {
+                let player = e.target
+                // log('canplay', player.duration)
+                let time = labelFromTime(player.duration)
+                // 滑跳到0
+                $('#id-input-slider').val(0)
+                // 更新时间
+                $('#id-time-current').text('0:00')
+                $('#id-time-duration').text(time)
+            })
+        }
+
+        // var play = function(offset) {
+        //     let activeIndex = $('.play-list').data('active')
+        //     let numberOfMusic = $('play-list').date('music')
+        //     let i = (activeIndex + offset + numberOfMusic) % numberOfMusic
+        // }
+        // $('.play-list').each(function(i, e) {
+        //     log(e)
+        // })
+
+
+
+        let bindPlayEvents = function() {
+            let player = $('#id-audio-player')[0]
+            // 播放下一首
+            $('.music-next').on('click',function() {
+                let number = Number(Music.now_id)
+                let nextId = (number + 1) % Music.list.length
+                player.src = Music.list[nextId].music_src
+                Music.now_id = nextId
+                // 改变title歌名
+                $('#id-song-title').text(Music.list[nextId].music_name)
+            })
+            // 自动播放下一首
+            $('#id-audio-player').on('ended',function() {
+                let number = Number(Music.now_id)
+                let nextId = (number + 1) % Music.list.length
+                player.src = Music.list[nextId].music_src
+                Music.now_id = nextId
+                // 改变title歌名
+                $('#id-song-title').text(Music.list[nextId].music_name)
+            })
+            // 播放上一首
+            $('.music-prev').on('click',function() {
+                let number = Number(Music.now_id)
+                let prevId = (number - 1) % Music.list.length
+                player.src = Music.list[prevId].music_src
+                Music.now_id = prevId
+                // 改变title歌名
+                $('#id-song-title').text(Music.list[prevId].music_name)
+            })
+            // 播放
+            $('.music-control-play').on('click',function() {
+                let player = $('#id-audio-player')[0]
+                player.play()
+                // 改变图片（变成暂停）
+
+                // let activeIndex = $('.slide-img').data('active')
+                // let numberOfImgs = $('.slide-img').data('img')
+                // // 图片的下标
+                // let i = (activeIndex + numberOfImgs) % numberOfImgs
+                // // 删除play图片
+                // $('.music-control').removeClass('slide-img-active')
+                // // // // 显示stop图片
+                // // let active = $($('.music-control')[i])
+                // // log(active)
+                // // active.addClass('slide-img-active')
+            })
+            // 暂停
+            $('.music-control-stop').on('click',function() {
+                let player = $('#id-audio-player')[0]
+                player.pause()
+            })
+        }
+        bindPlayEvents()
+        let bindEvents = function() {
+            listInit()
+            bindSwitch()
+            bindTimeSlider()
+            bindAudioEvents()
+        }
+        bindEvents()
+    </script>
+</html>

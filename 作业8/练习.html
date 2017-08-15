@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>作业练习</title>
+    </head>
+    <body>
+        <div class="todo-main">
+            <div class="todo-form">
+                <input id='id-input-todo' type="text">
+                <button id='id-button-add'type="button">登录</button>
+            </div>
+        </div>
+        <script>
+var log = console.log.bind(console)
+
+let addButton = document.querySelector('#id-button-add')
+addButton.addEventListener('click',function() {
+    let todoInput = document.querySelector('#id-input-todo')
+    log(todoInput.value)
+    let shuxing = 'abcdefghijklmnopqrstuvwxyz1234567890_'
+    let shuzi = 'abcdefghijklmnopqrstuvwxyz'
+    let n = todoInput.value.length
+})
+
+        </script>
+        <script src="课后作业.js" charset="utf-8"></script>
+    </body>
+</html>

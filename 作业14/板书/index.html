@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>轮播图</title>
+        <style media="screen">
+            .vertical-center {
+                top: 50%;
+                position: relative;
+                transform: translateY(-50%);
+            }
+            .slide {
+                width: 700px;
+                height: 400px;
+                overflow: hidden;
+            }
+            .slide-images {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            .slide-img {
+                display: none;
+            }
+            .slide-img-active {
+                display: block;
+            }
+            .slide-button {
+                /*display: none;*/
+                width: 25px;
+                height: 70px;
+                background: black;
+                color: white;
+                border: 0;
+                padding: 0;
+                outline: 0;
+                opacity: 0.418;
+                font-family: Microsoft YaHei;
+                font-size: 26px;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-61.8%);
+            }
+            .slide-button-left {
+                left: 0;
+            }
+            .slide-button-right {
+                right: 0;
+            }
+            .slide-indicators {
+                bottom: 20px;
+                position: relative;
+                text-align: center;
+            }
+            .slide-i {
+                display: inline-block;
+                background: blue;
+                color: white;
+                border-radius: 50%;
+                padding: 0 5px;
+            }
+            .slide-i-active {
+                background: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="slide">
+            <div class="slide-images" data-active='0' data-imgs='3'>
+                <img class="slide-img slide-img-active" src="1.jpg" alt="">
+                <img class="slide-img" src="2.jpg" alt="">
+                <img class="slide-img" src="3.jpg" alt="">
+                <button class="slide-button slide-button-left vertical-center"type="button"><</button>
+                <button class="slide-button slide-button-right vertical-center"type="button">></button>
+            </div>
+            <div class="slide-indicators">
+                <div class="slide-i slide-i-active">1</div>
+                <div class="slide-i">2</div>
+                <div class="slide-i">3</div>
+            </div>
+        </div>
+        <span style="display: block;"></span>
+    </body>
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+    <script>
+        let log = console.log.bind(console)
+        let play = function(offset) {
+            let activeIndex = $('.slide-images').data('active')
+            let numberOfImgs = $('.slide-images').data('imgs')
+            //照片的下标
+            let i = (activeIndex + offset + numberOfImgs) % numberOfImgs
+            $('.slide-images').data('active', i)
+            $('.slide-images-active').fadeOut()
+            //给active删除class
+            $('.slide-img-active').removeClass('slide-img-active')
+            //给下一个img加上class
+            //$('slide-img'[i])是一个dom对象，需要转化
+            let active = $($('.slide-img')[i])
+            active.addClass('slide-img-active')
+            active.fadeIn()
+            //改变指示器
+            $('.slide-i-active').removeClass('slide-i-active')
+            let activeIndicator = $($('.slide-i')[i])
+            activeIndicator.addClass('slide-i-active')
+        }
+        // 按钮显示隐藏
+        $('.slide-images').on('mouseover', function() {
+            $('.slide-button').show()
+        })
+        $('.slide-images').on('mouseout', function() {
+            $('.slide-button').hide()
+        })
+        //播放上一张
+        let playPrev = function() {
+            play(-1)
+        }
+        //播放下一张
+        let playNext = function() {
+            play(1)
+        }
+        $('.slide-button').on('click', function(event) {
+            let button = $(event.target)
+            //判断button是否有左右属性
+            if (button.hasClass('slide-button-left')) {
+                playPrev()
+            } else {
+                playNext()
+            }
+        })
+        // 时间
+        let time = setInterval(function() {
+            playNext()
+        }, 3000)
+       $('.slide-images').on('mouseout',function() {
+           time = setInterval(function() {
+               playNext()
+           }, 3000)
+       })
+       $('.slide-images').on('mouseover', function() {
+           time = clearInterval(time)
+      })
+    </script>
+</html>

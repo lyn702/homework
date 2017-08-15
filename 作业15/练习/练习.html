@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>练习</title>
+        <style>
+        .vertical-center {
+            top: 50%;
+            position: relative;
+            transform: translateY(-50%);
+        }
+        .wenbenkuang {
+            width: 300px;
+            height: 200px;
+        }
+        .wenbenkuang-xuanze-renwu{
+            padding: 10px;
+            text-align: left;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="wenbenkuang">
+            <div class="wenbenkuang-xuanze vertical-center">
+                动漫主角
+                <div class="wenbenkuang-xuanze-renwu">
+
+                </div>
+            <button class="button-quanxuan" name="button">全选</button>
+            <button class="button-fanxuan" name="button">反选</button>
+            </div>
+        </div>
+    </body>
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+    <script>
+    let log = console.log.bind(console)
+        // var options = ['路飞','鸣人', '金木', '艾伦', '黑子', '一护']
+        // $(options).each(function(i, e) {
+        //     let neirong =
+        //     `
+        //     <div><input type="checkbox">${e}</div>
+        //     `
+        //     $('.wenbenkuang-xuanze-renwu').append(neirong)
+        // })
+
+        // let change = function() {
+        //     $(options).each(function(i, e) {
+        //         e.checked = true
+        //         }
+        //     })
+        // }
+
+        // 初始化 html
+        let options = [
+            {text:'卡卡罗特', checked: true},
+            {text:'李青', checked: false},
+            {text:'放逐之刃', checked: false},
+            {text:'疾风剑豪', checked: false},
+            {text:'诺克萨斯之手', checked: false},
+            {text:'面对疾风吧', checked: true},
+        ]
+        for (var i = 0; i < options.length; i++) {
+            let e = options[i]
+            let xuanze = ''
+            if (e.checked === true) {
+                xuanze = 'checked'
+            }
+            let neirong = `
+            <div><input class='xuan'${xuanze} type="checkbox" data-str='${e.text}'>${e.text}</div>
+            `
+            $('.wenbenkuang-xuanze-renwu').append(neirong)
+        }
+        // 全选 按钮
+        $('.button-quanxuan').on('click', function() {
+            $('.xuan').each(function(i, e) {
+                e.checked = true
+                // e.checked = true
+                // log(options)
+            })
+        })
+
+    </script>
+</html>

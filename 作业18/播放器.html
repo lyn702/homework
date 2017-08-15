@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>播放器</title>
+        <style>
+        /*.vertical-center {
+            top: 50%;
+            position: relative;
+            transform: translateY(-50%);
+        }*/
+        html {
+            height:100%;
+            margin:0;
+            /*background-image: url(1.jpg);*/
+        }
+        body {
+            /*font-family: "Microsoft YaHei";*/
+            height: 80%;
+            text-align: center;
+            /*box-sizing: border-box;*/
+            margin:0;
+            transform:translateY(30%);
+        }
+        .head {
+            font-family: "Microsoft YaHei";
+            font-size: 1.5rem;
+            -webkit-margin-before: 0.83em;
+            -webkit-margin-after: 0.83em;
+            font-weight: bold;
+            color: gray;
+        }
+        .music-List{
+            font-family: "Microsoft YaHei";
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: blue;
+        }
+        .play-each {
+            display: none;
+        }
+        .play-active {
+            display: block;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="head">
+            一个外星来的音乐播放器
+        </div>
+        <hr>
+        <div class="music">
+            <div class="music-List">
+                <w class="music-each">Stuttering</w><br>
+                <w class="music-each">Ngẫu Hứng</w><br>
+                <w class="music-each">红色高跟鞋</w><br>
+                <w class="music-each">演员</w><br>
+            </div>
+            <hr>
+            <div class="play-List" data-playactive='0'>
+                <li class="play-each play-active">Fefe Dobson - Stuttering</li>
+                <li class="play-each">Hoaprox - Ngẫu Hứng</li>
+                <li class="play-each">蔡健雅 - 红色高跟鞋</li>
+                <li class="play-each">薛之谦 - 演员</li>
+            </div>
+            <hr>
+            <!-- <audio class="audio-player" controls="controls">
+
+            </audio> -->
+            <audio class="audio-player" controls="controls">
+                <source src="Fefe Dobson - Stuttering.mp3">
+                <source src="Hoaprox - Ngẫu Hứng.mp3">
+                <source src="蔡健雅 - 红色高跟鞋.mp3">
+                <source src="薛之谦 - 演员.mp3">
+            </audio>
+        </div>
+    </body>
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+    <script>
+        let log = console.log.bind(console)
+    </script>
+</html>
